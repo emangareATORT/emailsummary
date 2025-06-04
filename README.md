@@ -1,8 +1,21 @@
-# emailsummary
-Crea una aplicación python/web, que: - usará la API de OpenAI 4o-mini
-- recibirá un texto extenso, que será una cadena de mails
-- usando 4o-mini:
-1) generará un resumen de la cadena
-2) listará todas las personas involucradas en la cadena
-3) desplegará en un espacio a parte claramente cuáles son los "action items" de la cadena
-4) en un espacio a parte, y fácil de ser "copy", armará una estructura de una posible respuesta, marcando con "_____" los espacios a completar
+# Email Summary
+
+Simple Flask application that uses the OpenAI API (gpt-4o) to summarize an email chain.
+
+## Features
+1. Generates a summary of the chain.
+2. Lists all people involved.
+3. Displays action items.
+4. Provides a reply template with blanks (``_____``).
+
+## Usage
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Set the `OPENAI_API_KEY` environment variable with your OpenAI key.
+3. Run the application:
+   ```bash
+   python app.py
+   ```
+4. Open `http://localhost:5000` in your browser and paste the email chain.
