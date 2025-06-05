@@ -3,6 +3,21 @@ import openai
 import os
 import json
 
+
+def _load_json(content: str):
+    """Return dict parsed from the first JSON object found in content."""
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError:
+        start = content.find('{')
+        end = content.rfind('}')
+        if start != -1 and end != -1 and end > start:
+            try:
+                return json.loads(content[start:end + 1])
+            except json.JSONDecodeError:
+                pass
+    return None
+
 app = Flask(__name__)
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -88,13 +103,14 @@ def index():
             try:
                 response = openai.ChatCompletion.create(model=MODEL, messages=messages)
                 content = response.choices[0].message.content
-                try:
-                    data = json.loads(content)
+                data = _load_json(content)
+                if data is not None:
                     summary = data.get("summary")
                     people = data.get("people")
                     actions = data.get("actions")
                     response_template = data.get("response")
-                except json.JSONDecodeError:
+                else:
+                  except json.JSONDecodeError:
                     summary = "Error: Invalid JSON response from API"
             except Exception as e:
                 summary = f"Error: {e}"
