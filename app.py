@@ -23,6 +23,8 @@ TEMPLATE = """
     .success { color: #155724; background: #d4edda; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
     h1 { margin-top: 0; }
     pre { background: #f4f4f4; padding: 10px; border-radius: 6px; }
+    .output textarea { background: #f4f4f4; border: 1px solid #ccc; }
+    .output textarea { margin-bottom: 15px; }
     label { font-weight: bold; }
   </style>
   <script>
@@ -49,14 +51,16 @@ TEMPLATE = """
     <input id="submitBtn" type=submit value="Summarize">
   </form>
   {% if summary and not summary.startswith('Error:') and summary != "No email chain provided or OPENAI_API_KEY not set" %}
-    <h2>Summary</h2>
-    <pre>{{summary}}</pre>
-    <h2>People Involved</h2>
-    <pre>{{people}}</pre>
-    <h2>Action Items</h2>
-    <pre>{{actions}}</pre>
-    <h2>Response Template</h2>
-    <pre>{{response_template}}</pre>
+    <div class="output">
+      <label for="summary">Summary</label>
+      <textarea id="summary" rows="4" readonly>{{summary}}</textarea>
+      <label for="people">People Involved</label>
+      <textarea id="people" rows="3" readonly>{{people}}</textarea>
+      <label for="actions">Action Items</label>
+      <textarea id="actions" rows="4" readonly>{{actions}}</textarea>
+      <label for="response_template">Response Template</label>
+      <textarea id="response_template" rows="6" readonly>{{response_template}}</textarea>
+    </div>
   {% endif %}
 </div>
 </body>
@@ -91,7 +95,7 @@ def index():
                     actions = data.get("actions")
                     response_template = data.get("response")
                 except json.JSONDecodeError:
-                    summary = content
+                    summary = "Error: Invalid JSON response from API"
             except Exception as e:
                 summary = f"Error: {e}"
         else:
