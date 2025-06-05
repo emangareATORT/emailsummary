@@ -110,6 +110,7 @@ def index():
                     actions = data.get("actions")
                     response_template = data.get("response")
                 else:
+                  except json.JSONDecodeError:
                     summary = "Error: Invalid JSON response from API"
             except Exception as e:
                 summary = f"Error: {e}"
